@@ -132,7 +132,7 @@ require('lazy').setup({
     -- See `:help lualine.txt`
     opts = {
       options = {
-        icons_enabled = false,
+        icons_enabled = true,
         theme = 'nightfox',
         component_separators = '|',
         section_separators = '',
@@ -358,6 +358,14 @@ require('nvim-treesitter.configs').setup {
       swap_previous = {
         ['<leader>A'] = '@parameter.inner',
       },
+    },
+    lsp_interop = {
+      enable = true,
+      border = "none",
+      peek_definition_code = {
+        ["<leader>df"] = "@function.outer",
+        ["<leader>dF"] = "@class.outer",
+      }
     },
   },
 }

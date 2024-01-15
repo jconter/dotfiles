@@ -49,8 +49,10 @@ keybinds {
     tab {
         bind "Ctrl t" { SwitchToMode "Normal"; }
         bind "r" { SwitchToMode "RenameTab"; TabNameInput 0; }
-        bind "h" "Left" "Up" "k" { GoToPreviousTab; }
-        bind "l" "Right" "Down" "j" { GoToNextTab; }
+        // bind "h" "Left" "Up" "k" { GoToPreviousTab; }
+        bind "h" { GoToPreviousTab; }
+        // bind "l" "Right" "Down" "j" { GoToNextTab; }
+        bind "l" { GoToNextTab; }
         bind "n" { NewTab; SwitchToMode "Normal"; }
         bind "x" { CloseTab; SwitchToMode "Normal"; }
         bind "s" { ToggleActiveSyncTab; SwitchToMode "Normal"; }
@@ -186,7 +188,7 @@ plugins {
 //   - detach (Default)
 //   - quit
 //
-// on_force_close "quit"
+on_force_close "detach"
 
 //  Send a request for a simplified ui (without arrow fonts) to plugins
 //  Options:
@@ -264,7 +266,7 @@ default_layout "compact"
 // Valid values: positive integers
 // Default value: 10000
 //
-// scroll_buffer_size 10000
+scroll_buffer_size 100000
 
 // Provide a command to execute when copying text. The text will be piped to
 // the stdin of the program to perform the copy. This can be used with
@@ -300,7 +302,7 @@ default_layout "compact"
 // or should each user have their own cursor (false)
 // Default: false
 //
-// mirror_session true
+mirror_session true
 
 // The folder in which Zellij will look for layouts
 //

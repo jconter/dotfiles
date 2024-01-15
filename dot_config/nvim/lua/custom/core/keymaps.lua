@@ -39,7 +39,7 @@ vim.keymap.set(
 vim.keymap.set(
 	'n',
 	'<leader>bc',
-	'<cmd>bufdo bwipeout<CR>',
+	'<cmd>bwipeout<CR>',
 	opts
 )
 
