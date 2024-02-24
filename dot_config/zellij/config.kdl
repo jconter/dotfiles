@@ -239,7 +239,7 @@ pane_frames false
 // Choose the theme that is specified in the themes section.
 // Default: default
 //
-// theme "default"
+theme "nightfox"
 
 // The name of the default layout to load on startup
 // Default: "default"
@@ -302,7 +302,7 @@ scroll_buffer_size 100000
 // or should each user have their own cursor (false)
 // Default: false
 //
-mirror_session true
+// mirror_session true
 
 // The folder in which Zellij will look for layouts
 //
