@@ -145,10 +145,11 @@ require('lazy').setup({
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help indent_blankline.txt`
-    main = 'ibl',
+    main = "ibl",
     opts = {
-      -- char = '┊',
-      -- show_trailing_blankline_indent = false,
+      indent = {
+        char = {'┊'},
+      },
     },
   },
 
@@ -430,7 +431,13 @@ end
 local servers = {
   -- clangd = {},
   -- gopls = {},
-  pyright = {},
+  pyright = {
+    python = {
+      analysis = {
+        typeCheckingMode = "strict"
+      }
+    }
+  },
   -- rust_analyzer = {},
   -- tsserver = {},
 
