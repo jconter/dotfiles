@@ -8,9 +8,9 @@ bold.family = "FiraCode Nerd Font"
 italic.family = "FiraCode Nerd Font"
 bold_italic.family = "FiraCode Nerd Font"
 
-[selection]
-
-save_to_clipboard = true
+# [selection]
+#
+# save_to_clipboard = true
 
 # Colors (NightFox)
 
