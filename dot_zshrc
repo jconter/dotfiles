@@ -83,10 +83,19 @@ eval "$(zellij setup --generate-auto-start zsh)"
 
 #Aliases
 alias vim="nvim"
+alias ls="ls --color"
 alias lsa="ls -hal"
 alias ll="ls -l"
 alias config="cd ~/.config"
 alias work="cd /_work"
+alias afd="afx-devtools"
+alias devtools="cd /_work/devtools-data_team_utils && source /_work/.virtualenvs//_work/.virtualenvs/afx-devtools/bin/activate"
+alias broker="cd /_work/broker && source venv/bin/activate"
+alias analytics="cd /_work/archfx_analytics && source /_work/.virtualenvs/analytics/bin/activate"
+alias uu="sudo apt update && sudo apt upgrade -y"
+
+export EDITOR=nvim
+export VISUAL=nvim
 
 export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
