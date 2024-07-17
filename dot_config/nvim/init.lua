@@ -21,7 +21,7 @@ them once you know what you're doing, but they should serve as a guide for when 
 are first encountering a few different constructs in your nvim config.
 I hope you enjoy your Neovim journey,
 - TJ
-P.S. You can delete this when you're done too. It's your config now :)
+P.S. You can delete t when you're done too. It's your config now :)
 --]]
 -- Set <space> as the leader key
 -- See `:help mapleader`
@@ -273,6 +273,11 @@ require('telescope').setup {
         ['<C-u>'] = false,
         ['<C-d>'] = false,
       },
+    },
+  },
+  pickers = {
+    find_files = {
+      find_command = {'rg', '--files', '--hidden', '-g', '!.git'}
     },
   },
 }
