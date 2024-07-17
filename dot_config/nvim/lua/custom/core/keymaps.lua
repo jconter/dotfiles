@@ -58,3 +58,6 @@ vim.keymap.set('n', '<leader>wJ', '<cmd>resize +5<CR>', opts)
 vim.keymap.set('n', '<leader>wL', '<C-W>5>', opts)
 vim.keymap.set('n', '<leader>wK', '<cmd>resize -5<CR>', opts)
 vim.keymap.set('n', '<leader>w=', '<C-W>=', opts)
+
+--Oil
+vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = "Open parent directory" })
