@@ -1,7 +1,7 @@
 # Setup Zellij 
 # ZELLIJ_AUTO_ATTACH=true
-ZELLIJ_AUTO_EXIT=true
-eval "$(zellij setup --generate-auto-start zsh)"
+# ZELLIJ_AUTO_EXIT=true
+# eval "$(zellij setup --generate-auto-start zsh)"
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -89,10 +89,16 @@ alias ll="ls -l"
 alias config="cd ~/.config"
 alias work="cd /_work"
 alias afd="afx-devtools"
-alias devtools="cd /_work/devtools-data_team_utils && source /_work/.virtualenvs//_work/.virtualenvs/afx-devtools/bin/activate"
+alias devtools="cd /_work/devtools-data_team_utils && source /_work/.virtualenvs/afx-devtools/bin/activate"
 alias broker="cd /_work/broker && source venv/bin/activate"
 alias analytics="cd /_work/archfx_analytics && source /_work/.virtualenvs/analytics/bin/activate"
 alias uu="sudo apt update && sudo apt upgrade -y"
+alias ovpn="openvpn3"
+alias vpnin="ovpn session-start --config ~/Downloads/profile-91.ovpn"
+alias deploy="cd /_work/deploy/data_team_utils/portainer/cluster_deploy/ && vpnin && poetry shell"
+alias filter="filter-messages -f . /_work/broker/external/filter_scripts/export_raw.py --all-headers"
+alias aws_ecr="aws ecr get-login-password --profile arch --region us-east-1 | docker login --username AWS --password-stdin 117451510466.dkr.ecr.us-east-1.amazonaws.com"
+alias arch_vpn="openvpn3 session-start --config ~/Downloads/profile-91.ovpn"
 
 export EDITOR=nvim
 export VISUAL=nvim
