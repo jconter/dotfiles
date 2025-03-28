@@ -61,3 +61,11 @@ vim.keymap.set('n', '<leader>w=', '<C-W>=', opts)
 
 --Oil
 vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = "Open parent directory" })
+
+--Diffview
+vim.keymap.set('n', '<leader>dvo', '<CMD>DiffviewOpen<CR>', {desc = "Diffview Open"})
+
+--Git
+vim.keymap.set('n', '<leader>gt', "<CMD>Git<CR>", {desc = "Open Git Viewer"})
+vim.keymap.set('n', '<leader>gpl', "<CMD>Git pull<CR>", {desc = "Git pull on current branch"})
+vim.keymap.set('n', '<leader>gps', "<CMD>Git push<CR>", {desc = "Git push on current branch"})
