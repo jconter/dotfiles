@@ -112,11 +112,14 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 
+
 export PATH=$PATH:/usr/local/go/bin
 export PATH=$PATH:$GOPATH/bin
 export PATH=$HOME/go/bin:$PATH
 export PATH="/Users/jconter/.local/bin:$PATH"
 export PATH="$PATH:/opt/nvim-linux64/bin"
+# Secrets
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
 eval "$(starship init zsh)"
 
