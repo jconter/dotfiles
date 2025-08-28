@@ -2,3 +2,4 @@ theme = "nightfox"
 keybind = alt+h=previous_tab
 keybind = alt+l=next_tab
 window-decoration = false
+font-family = FiraCode Nerd Font Mono
