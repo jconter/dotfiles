@@ -663,6 +663,58 @@ require('lazy').setup({
       --  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
       local capabilities = require('blink.cmp').get_lsp_capabilities()
 
+      -- add this block:
+      local tsdk = (function()
+        -- 1) prefer project TS first
+        local cwd_tsdk = vim.fn.getcwd() .. '/node_modules/typescript/lib'
+        if vim.fn.isdirectory(cwd_tsdk) == 1 then
+          return cwd_tsdk
+        end
+
+        -- 2) try Mason packages (guarded)
+        local ok, mr = pcall(require, 'mason-registry')
+        if ok then
+          local function pkg_tsdk(pkg_name, suffix)
+            if mr.has_package(pkg_name) then
+              local pkg = mr.get_package(pkg_name)
+              local ok2, install_path = pcall(function()
+                return type(pkg.get_install_path) == 'function' and pkg:get_install_path() or nil
+              end)
+              if ok2 and install_path then
+                return install_path .. (suffix or '')
+              end
+            end
+          end
+          -- standalone TS SDK
+          local p = pkg_tsdk('typescript', '/lib')
+          if p then
+            return p
+          end
+          -- SDK bundled with typescript-language-server
+          p = pkg_tsdk('typescript-language-server', '/node_modules/typescript/lib')
+          if p then
+            return p
+          end
+        end
+
+        -- 3) fallback: let Volar resolve globally
+        return nil
+      end)()
+
+      -- Resolve Mason's @vue/language-server path (safe if not installed yet)
+      local vue_ls_path = (function()
+        local ok, mr = pcall(require, 'mason-registry')
+        if not ok or not mr.has_package 'vue-language-server' then
+          return nil
+        end
+        local pkg = mr.get_package 'vue-language-server'
+        local ok2, install_path = pcall(pkg.get_install_path, pkg)
+        if not ok2 then
+          return nil
+        end
+        return install_path .. '/node_modules/@vue/language-server'
+      end)()
+
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
       --
@@ -706,7 +758,37 @@ require('lazy').setup({
             },
           },
         },
+        ts_ls = {
+          -- tsserver must attach to .vue for the plugin to work
+          filetypes = {
+            'javascript',
+            'javascriptreact',
+            'javascript.jsx',
+            'typescript',
+            'typescriptreact',
+            'typescript.tsx',
+            'vue',
+          },
+          single_file_support = false,
+          init_options = {
+            hostInfo = 'neovim',
+            plugins = (vue_ls_path and {
+              {
+                name = '@vue/typescript-plugin',
+                location = vue_ls_path,
+                languages = { 'vue' },
+              },
+            } or {}),
+          },
+        },
+
+        vue_ls = {
+          filetypes = { 'vue' },
+        },
       }
+      -- Back/forward compat for names that differ across plugin versions
+      servers.tsserver = servers.tsserver or servers.ts_ls
+      servers.vue_ls = servers.vue_ls or servers.volar
 
       -- Ensure the servers and tools above are installed
       --
@@ -722,6 +804,19 @@ require('lazy').setup({
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
+      -- translate LSP server names -> Mason package names when they differ
+      local lsp_to_mason = {
+        ts_ls = 'typescript-language-server',
+        tsserver = 'typescript-language-server', -- add this
+        vue_ls = 'vue-language-server', -- add this
+        volar = 'vue-language-server',
+      }
+
+      for i, name in ipairs(ensure_installed) do
+        if lsp_to_mason[name] then
+          ensure_installed[i] = lsp_to_mason[name]
+        end
+      end
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
       })
@@ -946,30 +1041,11 @@ require('lazy').setup({
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
-  { -- Highlight, edit, and navigate code
+  {
     'nvim-treesitter/nvim-treesitter',
+    branch = 'main',
+    lazy = false,
     build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-    opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
-      indent = { enable = true, disable = { 'ruby' } },
-    },
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
@@ -985,7 +1061,7 @@ require('lazy').setup({
   require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
-  require 'kickstart.plugins.neo-tree',
+  -- require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`

@@ -1,1 +1,2 @@
 . "$HOME/.cargo/env"
+export FORGEJO_TOKEN="a16bd80f4437523b2dc4490044878a8e0b72f53b"
